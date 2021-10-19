@@ -1,0 +1,14 @@
+{
+	"manifest_version": 1,
+	"id": "de.habelt.CodeSection",
+	"app_min_version": "2.2",
+	"version": "1.0.0",
+	"name": "Code Section",
+	"description": "Inserts a piece of code from code source",
+	"author": "Jürgen Habelt",
+	"homepage_url": "https://juergen.habelt-jena.de",
+	"repository_url": "",
+	"keywords": [],
+	"_publish_hash": "sha256:bf541ece96513b5afbd56136f69d188cf132bab4212e5ffc6e25f3e6de934e9a",
+	"_publish_commit": "master:e297f72a294aa66b5be6ca71e1d734801166f760"
+}

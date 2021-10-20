@@ -1,24 +1,36 @@
-# Joplin Plugin
+# Code Section Joplin Plugin
+This plug-in displays a piece of source code. It does this by supporting a code definition
+inside a code definition block.
 
-This is a template to create a new Joplin plugin.
+The code definition looks as follows:
 
-The main two files you will want to look at are:
+\`\`\``codesection`</br>
+`{`</br>
+`"lang": "python",`</br>
+`"src": "CODE-SOURCE-APPENDIX",`</br>
+`"begin": 1,`</br>
+`"end": 50,`</br>
+`"expandTabs": true,`</br>
+`"tabSize": 4,`</br>
+`"lineNumbers": false,`</br>
+`}`</br>
+\`\`\`
 
-- `/src/index.ts`, which contains the entry point for the plugin source code.
-- `/src/manifest.json`, which is the plugin manifest. It contains information such as the plugin a name, version, etc.
+Several entries can be omitted and will be replaced by their defaults. The source language and
+the source itself are mandatory.
 
-## Building the plugin
+The inserted code will be displayed using the default renderer for that language including syntax
+highlighting.
 
-The plugin is built using Webpack, which creates the compiled code in `/dist`. A JPL archive will also be created at the root, which can use to distribute the plugin.
+This could look like this:
 
-To build the plugin, simply run `npm run dist`.
+![Python Source Code](./doc/Python Source Code.png)
+## Procedure
+ 1. Append a code source to the note
+ 1. Immediately following it add a `codesection` describing the code to be displayed
+ 1. The description has the shape of a JSON string
+ 1. The "src" attribute identifies the code source (its id followed by extension)
+ 1. Alternatively you could copy and paste the code insertion into the quotes of src 
 
-The project is setup to use TypeScript, although you can change the configuration to use plain JavaScript.
-
-## Updating the plugin framework
-
-To update the plugin framework, run `npm run update`.
-
-In general this command tries to do the right thing - in particular it's going to merge the changes in package.json and .gitignore instead of overwriting. It will also leave "/src" as well as README.md untouched.
-
-The file that may cause problem is "webpack.config.js" because it's going to be overwritten. For that reason, if you want to change it, consider creating a separate JavaScript file and include it in webpack.config.js. That way, when you update, you only have to restore the line that include your file.
+## Known problems
+ - The line numbers are colored like the code lines, they should be black.

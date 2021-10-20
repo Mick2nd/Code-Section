@@ -22,7 +22,8 @@ module.exports =
 			return self.renderToken(tokens, idx, options, env, self);
 		};
 		let fenceRender = null;
-		let link_openRender = null;
+		let linkOpenRender = null;
+		let currentLink = null;
 
 		return {
 			plugin: function(markdownIt, ruleOptions) {
@@ -32,12 +33,25 @@ module.exports =
 				const pluginId = context.pluginId;
 				const indicator = 'codesection';
 	
+				if (linkOpenRender === null)
+					linkOpenRender = markdownIt.renderer.rules.link_open;
 				if (fenceRender === null)	
 					fenceRender = markdownIt.renderer.rules.fence;
 				const originalRender = fenceRender || defaultRender;
-			
-				markdownIt.renderer.rules.fence = function(tokens, idx, options, env, self) {
 
+				markdownIt.renderer.rules.link_open = function(tokens, idx)										// replacement for link_open rule 
+				{
+					let result = linkOpenRender(tokens, idx);													// original must be invoked first
+					
+					if (!currentLink)
+						currentLink = ruleOptions.context.currentLinks.find(									// after this we get full resource path!!
+							link => link.resourceFullPath !== null);
+
+					return result;
+				};
+			
+				markdownIt.renderer.rules.fence = function(tokens, idx, options, env, self) 					// replacement for FENCE rule
+				{
 					let token = tokens[idx];
 					if (token.info === indicator) 																// modification only for codesection fence
 					{
@@ -45,32 +59,29 @@ module.exports =
 						{
 							console.info(`Here in codesection fence, original content: ${token.content}`);
 							
-							codeExtractor = new CodeExtractor.default();
+							if (!currentLink)
+							{
+								throw new Error('No resource found');
+							}
+							
+							codeExtractor = new CodeExtractor.default(currentLink.resourceFullPath);
 							codeExtractor.parse(token.content);
 							
 							token.info = codeExtractor.get_lang();												// the idea with this code is to modify the current fence token
 							token.content = codeExtractor.get_text();
+							
+							let result = originalRender(tokens, idx, options, env, self);						// then invoke the original render function
+							result = codeExtractor.style_numbers(result);										// for line numbers we need extra mark-up (pre with extra styles)
+							return result;
 						}
 						catch(e)
 						{
-							console.error(`${e}`);
+							console.error(`${e}`);																// in error case display error in rendered pane as this can happen with JSON 
 							return '<p style="color: red;">' + `${e}` + '</p>';
 						}
 					}
 							
 					return originalRender(tokens, idx, options, env, self);										// then invoke the original render function
-				};
-
-				if (link_openRender === null)	
-					link_openRender = markdownIt.renderer.rules.link_open;
-				
-				markdownIt.renderer.rules.link_open = function(tokens, idx)
-				{
-					const token = tokens[idx];
-					const href = getAttr(token.attrs, 'href', '');
-					console.info(`Href: ${href}, Resources: ${JSON.stringify(ruleOptions.resources)}`);
-					
-					return link_openRender(tokens, idx);
 				};
 			},
 			

@@ -7,8 +7,8 @@
 	"description": "Inserts a piece of code from code source",
 	"author": "Jürgen Habelt",
 	"homepage_url": "https://juergen.habelt-jena.de",
-	"repository_url": "",
+	"repository_url": "https://github.com/Mick2nd/Code-Section",
 	"keywords": [],
-	"_publish_hash": "sha256:bf541ece96513b5afbd56136f69d188cf132bab4212e5ffc6e25f3e6de934e9a",
-	"_publish_commit": "master:e297f72a294aa66b5be6ca71e1d734801166f760"
+	"_publish_hash": "sha256:83880c45e85cf3bdca41e49df8ecb4be13a763f0d2769d674b243d5f69d5e56c",
+	"_publish_commit": "master:6765632372d4693260407a6e39b847c57b308d57"
 }

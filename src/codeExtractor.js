@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path')
 
 
 /**
@@ -9,7 +10,7 @@ class CodeExtractor
 	/**
 		@abstract Constructor
 	 */
-	constructor()
+	constructor(resourceFullPath)
 	{
 		this.defaults = {
 			lang: "",
@@ -20,6 +21,8 @@ class CodeExtractor
 			tabSize: 4,
 			lineNumbers: false
 		};
+		
+		this.resourcesPath = path.dirname(resourceFullPath);
 	}
 	
 	/**
@@ -42,7 +45,7 @@ class CodeExtractor
 	 */
 	get_text = function()
 	{
-		const path = '../resources/' + this.codeDefinition.src;
+		const path = this.resourcesPath + '/' + this.codeDefinition.src;
 		const content = fs.readFileSync(path, 'utf-8');
 		let lines = content.split('\n');
 		lines = lines.slice(this.codeDefinition.begin - 1, this.codeDefinition.end);
@@ -61,6 +64,23 @@ class CodeExtractor
 	get_lang = function()
 	{
 		return this.codeDefinition.lang;
+	}
+	
+	/**
+		@abstract Styles the line numbers, e.g. encapsulates them with <pre> tags with proper styling
+		
+		This function does its work after rendering for the ready to be displayed html
+	 */
+	style_numbers = function(result)
+	{
+		return result.replace(																// for line numbers we need extra mark-up (pre with extra styles)
+			/\<code\>.*?\<\/code\>/smg, 
+			(match, offset, whole) =>
+			{ 
+				return match.replace(
+					/(^|\<code\>)(\d\d\d\d)/smg, 											// do this with regex replacement
+					`$1<pre class="hljs-lineno">$2</pre>`);
+			});
 	}
 	
 	/**
@@ -111,7 +131,8 @@ class CodeExtractor
 	}
 }
 
-
 module.exports = {
 	default: CodeExtractor	
 }
+
+// export const default = CodeExtractor;

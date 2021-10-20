@@ -7,3 +7,8 @@
 	background-color: rgb(202, 255, 255);
 	color: rgb(10, 0, 104);
 }
+
+.hljs-lineno {
+	display: inline;
+	color: grey;
+}

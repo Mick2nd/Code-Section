@@ -36,7 +36,3 @@ This could look like this:
  1. The description has the shape of a JSON string
  1. The "src" attribute identifies the code source (its id followed by extension)
  1. Alternatively you could copy and paste the code insertion into the quotes of src
-
-## Known problems
-
-- The line numbers are colored like the code lines, they should be black.

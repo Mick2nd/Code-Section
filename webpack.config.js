@@ -171,6 +171,9 @@ const extraScriptConfig = Object.assign({}, baseConfig, {
 		},
 		extensions: ['.tsx', '.ts', '.js', '.json'],
 	},
+	node: {
+		"fs-extra": "empty",
+	},
 });
 
 const createArchiveConfig = {

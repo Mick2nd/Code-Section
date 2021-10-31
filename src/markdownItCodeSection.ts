@@ -1,7 +1,7 @@
 const CodeExtractor = require('./codeExtractor');
 
 
-const getAttr = function(attrs, name, defaultValue = null) 
+const getAttr = function(attrs: any, name: string, defaultValue: any = null) : any 
 {
 	for (let i = 0; i < attrs.length; i++) 
 	{
@@ -14,11 +14,12 @@ const getAttr = function(attrs, name, defaultValue = null)
 	
 module.exports = 
 {
-	default: function(context) 
+	default: function(context: any) 
 	{
 		console.info('Here returning Plugin function');
 		
-		const defaultRender = function(tokens, idx, options, env, self) {
+		const defaultRender = function(tokens: any, idx: any, options: any, env: any, self:any) : any 
+		{
 			return self.renderToken(tokens, idx, options, env, self);
 		};
 		let fenceRender = null;
@@ -26,8 +27,8 @@ module.exports =
 		let currentLink = null;
 
 		return {
-			plugin: function(markdownIt, ruleOptions) {
-				
+			plugin: function(markdownIt: any, ruleOptions: any) : any 
+			{	
 				console.info('Here in Plugin function');
 		
 				const pluginId = context.pluginId;
@@ -39,18 +40,19 @@ module.exports =
 					fenceRender = markdownIt.renderer.rules.fence;
 				const originalRender = fenceRender || defaultRender;
 
-				markdownIt.renderer.rules.link_open = function(tokens, idx)										// replacement for link_open rule 
+				markdownIt.renderer.rules.link_open = function(tokens: any, idx: any) : any						// replacement for link_open rule 
 				{
 					let result = linkOpenRender(tokens, idx);													// original must be invoked first
 					
 					if (!currentLink)
 						currentLink = ruleOptions.context.currentLinks.find(									// after this we get full resource path!!
-							link => link.resourceFullPath !== null);
+							(link: any) => link.resourceFullPath !== null);
 
 					return result;
 				};
 			
-				markdownIt.renderer.rules.fence = function(tokens, idx, options, env, self) 					// replacement for FENCE rule
+				markdownIt.renderer.rules.fence = 
+					function(tokens: any, idx: any, options: any, env: any, self: any) : any 					// replacement for FENCE rule
 				{
 					let token = tokens[idx];
 					if (token.info === indicator) 																// modification only for codesection fence
@@ -64,7 +66,7 @@ module.exports =
 								throw new Error('No resource found');
 							}
 							
-							codeExtractor = new CodeExtractor.default(currentLink.resourceFullPath);
+							let codeExtractor = new CodeExtractor.default(currentLink.resourceFullPath);
 							codeExtractor.parse(token.content);
 							
 							token.info = codeExtractor.get_lang();												// the idea with this code is to modify the current fence token

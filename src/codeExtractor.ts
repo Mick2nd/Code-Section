@@ -1,16 +1,16 @@
 const fs = require('fs-extra');
-const path = require('path')
+const path = require('path');
 
 
 /**
 	@abstract Class responsible for code extraction from file
  */
-class CodeExtractor
+export class CodeExtractor
 {
 	/**
 		@abstract Constructor
 	 */
-	constructor(resourceFullPath)
+	constructor(resourceFullPath:string)
 	{
 		this.defaults = {
 			lang: "",
@@ -28,11 +28,11 @@ class CodeExtractor
 	/**
 		@abstract Parse the code definition and store result object
 	 */
-	parse = function(codeDefinition)
+	parse = function(codeDefinition: any)
 	{
 		this.codeDefinition = JSON.parse(codeDefinition);								// parses the definition string
-		for (let [val, key] in this.defaults)
-			this.codeDefinition[key] = val || this.defaults[key];						// then fills the missing entries with defaults
+		for (let key in this.defaults)
+			this.codeDefinition[key] = this.codeDefinition[key] || this.defaults[key];	// then fills the missing entries with defaults
 			
 		this.modify_source();															// allow for alternative notation of source
 			
@@ -129,6 +129,9 @@ class CodeExtractor
 		this.codeDefinition.src = this.codeDefinition.src.replace(/\[.*?(\..*?)\]\(\:\/(.*?)\)/, '$2$1');
 		console.info(`Modified src definition: ${this.codeDefinition.src}`);
 	}
+	
+	defaults: any;
+	resourcesPath: string;
 }
 
 module.exports = {

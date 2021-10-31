@@ -2,13 +2,13 @@
 	"manifest_version": 1,
 	"id": "de.habelt.CodeSection",
 	"app_min_version": "2.2",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"name": "Code Section",
 	"description": "Inserts a piece of code from code source",
 	"author": "Jürgen Habelt",
 	"homepage_url": "https://juergen.habelt-jena.de",
 	"repository_url": "https://github.com/Mick2nd/Code-Section",
 	"keywords": [],
-	"_publish_hash": "sha256:83880c45e85cf3bdca41e49df8ecb4be13a763f0d2769d674b243d5f69d5e56c",
-	"_publish_commit": "master:6765632372d4693260407a6e39b847c57b308d57"
+	"_publish_hash": "sha256:3f61259d20f9f071681e567f9b6465477c4eb10055f657dd8ef294982191319b",
+	"_publish_commit": "master:50bfc6cb8f63efb267caf993a0450b19cb2b9c05"
 }

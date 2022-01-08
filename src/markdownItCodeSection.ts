@@ -45,8 +45,11 @@ module.exports =
 					let result = linkOpenRender(tokens, idx);													// original must be invoked first
 					
 					if (!currentLink)
+					{
 						currentLink = ruleOptions.context.currentLinks.find(									// after this we get full resource path!!
-							(link: any) => link.resourceFullPath !== null);
+							(link: any) => link.resourceFullPath);
+						console.info(`currentLink set to: ${currentLink}`);
+					}
 
 					return result;
 				};

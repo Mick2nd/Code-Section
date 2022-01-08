@@ -50,10 +50,10 @@ export class CodeExtractor
 		let lines = content.split('\n');
 		lines = lines.slice(this.codeDefinition.begin - 1, this.codeDefinition.end);
 		
-		lines = lines.map(line => this.replace_tabs(line));
+		lines = lines.map((line: string) => this.replace_tabs(line));
 		
 		let start = this.codeDefinition.begin;
-		lines = lines.map(line => this.add_lineno(line, start++));
+		lines = lines.map((line: string) => this.add_lineno(line, start++));
 		
 		return lines.join('\n');
 	}
@@ -71,11 +71,11 @@ export class CodeExtractor
 		
 		This function does its work after rendering for the ready to be displayed html
 	 */
-	style_numbers = function(result)
+	style_numbers = function(result: string)
 	{
 		return result.replace(																// for line numbers we need extra mark-up (pre with extra styles)
 			/\<code\>.*?\<\/code\>/smg, 
-			(match, offset, whole) =>
+			(match: string, offset: any, whole: any) =>
 			{ 
 				return match.replace(
 					/(^|\<code\>)(\d\d\d\d)/smg, 											// do this with regex replacement
@@ -86,12 +86,12 @@ export class CodeExtractor
 	/**
 		@abstract Replace all tabs in a line, depending on codeDefinition
 	 */
-	replace_tabs = function(line)
+	replace_tabs = function(line: string)
 	{
 		const codeDefinition = this.codeDefinition;
 		let idx = 0;
 		
-		const replace = function(char)
+		const replace = function(char: string) : string
 		{
 			if (! codeDefinition.expandTabs || char != '\t')
 			{
@@ -113,7 +113,7 @@ export class CodeExtractor
 	/**
 		@abstract Add line number at the begin of a line
 	 */
-	add_lineno = function(line, no)
+	add_lineno = function(line: string, no: number) : string
 	{
 		if (! this.codeDefinition.lineNumbers)
 			return line;

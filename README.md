@@ -1,7 +1,6 @@
 # Code Section Joplin Plugin
 
-This plug-in displays a piece of source code. It does this by supporting a code definition
-inside a code definition block.
+This plug-in displays a piece of source code. It reads this source code from a source file which is appended to the note. The code is selected by supporting a code definition inside a code definition block.
 
 The code definition looks as follows:
 
@@ -36,3 +35,9 @@ This could look like this:
  1. The description has the shape of a JSON string
  1. The "src" attribute identifies the code source (its id followed by extension)
  1. Alternatively you could copy and paste the code insertion into the quotes of src
+
+## Problems
+
+ 1. The resource folder is not recognized after the start of Joplin. Workaround: Invoke the settings and then leave them
+ 2. Only local sources in the resource folder can be displayed, no web content
+ 3. The plugin uses synchroneous file access to read the source, no asynchroneous access

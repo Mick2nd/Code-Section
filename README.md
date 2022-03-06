@@ -38,6 +38,12 @@ This could look like this:
 
 ## Problems
 
- 1. The resource folder is not recognized after the start of Joplin. Workaround: Invoke the settings and then leave them
+ 1. ~~The resource folder is not recognized after the start of Joplin. Workaround: Invoke the settings and then leave them~~
  2. Only local sources in the resource folder can be displayed, no web content
  3. The plugin uses synchroneous file access to read the source, no asynchroneous access
+
+## Release Notes
+
+### 1.0.4
+
+- Fixed the bug where resource folder was not recognized. Workaround is no longer needed (see Problems 1.).

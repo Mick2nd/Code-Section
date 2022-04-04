@@ -1,6 +1,5 @@
 {
 	"extraScripts": [
-		"markdownItCodeSection.ts",
-		"codeExtractor.ts"
+		"markdownItCodeSection.ts"
 	]
 }

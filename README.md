@@ -47,3 +47,12 @@ This could look like this:
 ### 1.0.4
 
 - Fixed the bug where resource folder was not recognized. Workaround is no longer needed (see Problems 1.).
+
+### 1.0.5
+
+- Added a context menu command to insert a template of a *code section*
+- Added a few properties to the code section description:
+  - scale: a scale factor in percent as 80% or absolute font size
+  - spacing: the line spacing, default is 130% of the font size
+  - height: the height of the code section window, may be "auto", "fill", a value in pixels ("400px") or a factor in 
+percent relating to the window height

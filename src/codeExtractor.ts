@@ -19,7 +19,10 @@ export class CodeExtractor
 			end: 10,
 			expandTabs: true,
 			tabSize: 4,
-			lineNumbers: false
+			lineNumbers: false,
+			scale: "100%",
+			spacing: "130%",
+			height: "auto"
 		};
 		
 		this.resourcesPath = path.dirname(resourceFullPath);
@@ -33,6 +36,18 @@ export class CodeExtractor
 		this.codeDefinition = JSON.parse(codeDefinition);								// parses the definition string
 		for (let key in this.defaults)
 			this.codeDefinition[key] = this.codeDefinition[key] || this.defaults[key];	// then fills the missing entries with defaults
+			
+		if (this.codeDefinition.height === "fill")										// "auto" will be 66% of containing window
+		{
+			this.codeDefinition.height = "66%"
+		}
+		
+		if (this.codeDefinition.height.endsWith('%'))									// percentage will be converted to pixels
+		{
+			const percentage = this.codeDefinition.height.replace('%', '');
+			const height = percentage / 100.0 * window.innerHeight;
+			this.codeDefinition.height = `${height}px`; 
+		}
 			
 		this.modify_source();															// allow for alternative notation of source
 			
@@ -77,10 +92,15 @@ export class CodeExtractor
 			/\<code\>.*?\<\/code\>/smg, 
 			(match: string, offset: any, whole: any) =>
 			{ 
-				return match.replace(
-					/(^|\<code\>)(\d\d\d\d)/smg, 											// do this with regex replacement
-					`$1<pre class="hljs-lineno">$2</pre>`);
-			});
+				const inner = match.
+					replace(
+						/(^|\<code\>)(\d\d\d\d)/smg, 										// do this with regex replacement
+						`$1<pre class="hljs-lineno">$2</pre>`);
+				
+				return `<div class="hljs-code" style="font-size: ${this.codeDefinition.scale};` + 
+					` line-height: ${this.codeDefinition.spacing}; height: ` + 
+					`${this.codeDefinition.height}; ">` + inner + `</div>`;
+ 			});
 	}
 	
 	/**
@@ -126,6 +146,8 @@ export class CodeExtractor
 	 */
 	modify_source = function()
 	{
+		this.codeDefinition.src = this.codeDefinition.src.replace(/_resources/, ':');
+		this.codeDefinition.src = this.codeDefinition.src.replace(/(\..*?)\..*?\)/, '$1)');
 		this.codeDefinition.src = this.codeDefinition.src.replace(/\[.*?(\..*?)\]\(\:\/(.*?)\)/, '$2$1');
 		console.info(`Modified src definition: ${this.codeDefinition.src}`);
 	}

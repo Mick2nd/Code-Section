@@ -1,4 +1,6 @@
 const CodeExtractor = require('./codeExtractor');
+const fs = require('fs-extra');
+const path = require('path');
 
 
 const getAttr = function(attrs: any, name: string, defaultValue: any = null) : any 
@@ -45,15 +47,30 @@ module.exports =
 					markdownIt.renderer.rules.link_open = 
 						function(tokens: any[], idx: number) : any													// replacement for link_open rule 
 					{
+						let token = tokens[idx]
+						token['attrs'][0][1] = token['attrs'][0][1].replace(/_resources(.*?)\..*?$/, ':$1')
+						console.info(
+							`Invoking Original LINK_OPEN render function at ` + 
+							`${idx}: ${JSON.stringify(token)}`);
 						let result = originalLinkOpenRender(tokens, idx);											// original must be invoked first
-						console.info(`Original LINK_OPEN render function invoked at ${idx}: ${tokens[idx]}`);
+						console.info(
+							`Original LINK_OPEN render function invoked at ` + 
+							`${idx}: ${JSON.stringify(token)}`);
 						console.info(`${ruleOptions.context.currentLinks.length} links`);
 						
 						if (!currentLink)
 						{
 							currentLink = ruleOptions.context.currentLinks.find(									// after this we get full resource path!!
 								(link: any) => link.resourceFullPath);
-							console.info(`currentLink set to: ${currentLink}`);
+							if (currentLink)
+							{
+								console.info(`currentLink set to: ${JSON.stringify(currentLink)}`);
+							}
+							else
+							{
+								const link = ruleOptions.context.currentLinks.slice(-1)[0]
+								console.info(`Last link is: ${JSON.stringify(link)}`)
+							}
 						}
 	
 						return result;
@@ -79,7 +96,14 @@ module.exports =
 								
 								if (!currentLink)
 								{
-									throw new Error('No resource found');
+									let p = path.resolve('../resources') 											// workaround to get the note printed out (PDF)
+									console.info(`Here in folder: ${p}`)											// working in developer mode only
+									
+									if (!fs.existsSync(p))
+									{
+										throw new Error('No resource found');
+									} 
+									currentLink = { resourceFullPath: p + '/dummy' }									
 								}
 								
 								let codeExtractor = new CodeExtractor.default(currentLink.resourceFullPath);

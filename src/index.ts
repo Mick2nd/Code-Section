@@ -69,7 +69,7 @@ joplin.plugins.register(
 		await joplin.contentScripts.register(
 			ContentScriptType.MarkdownItPlugin,
 			id,
-			'./markdownItCodeSection.js'
+			'./markdownIt.js'
 		);
 
 		await joplin.contentScripts.onMessage(id, async function(message: any) {

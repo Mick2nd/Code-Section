@@ -10,9 +10,23 @@ export class CodeExtractor
 	/**
 		@abstract Constructor
 	 */
-	constructor(resourceFullPath:string)
+	constructor()
 	{
-		this.defaults = {
+	}
+	
+	indicator = function() : string
+	{
+		return "codesection";
+	}
+	
+	/**
+		@abstract Parse the code definition and store result object
+	 */
+	parse = function(resourcesPath:string, codeDefinition: any)
+	{
+		this.resourcesPath = resourcesPath;
+
+		this.defaults = {																// every parse resets the defaults
 			lang: "",
 			src: "",
 			begin: 1,
@@ -25,14 +39,6 @@ export class CodeExtractor
 			height: "auto"
 		};
 		
-		this.resourcesPath = path.dirname(resourceFullPath);
-	}
-	
-	/**
-		@abstract Parse the code definition and store result object
-	 */
-	parse = function(codeDefinition: any)
-	{
 		this.codeDefinition = JSON.parse(codeDefinition);								// parses the definition string
 		for (let key in this.defaults)
 			this.codeDefinition[key] = this.codeDefinition[key] || this.defaults[key];	// then fills the missing entries with defaults

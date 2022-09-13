@@ -56,3 +56,8 @@ This could look like this:
   - spacing: the line spacing, default is 130% of the font size
   - height: the height of the code section window, may be "auto", "fill", a value in pixels ("400px") or a factor in 
 percent relating to the window height
+
+### 1.0.6
+
+- Changed architecture of the plugin
+- Code Sections are printed now with export to pdf

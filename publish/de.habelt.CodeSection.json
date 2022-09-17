@@ -2,7 +2,7 @@
 	"manifest_version": 1,
 	"id": "de.habelt.CodeSection",
 	"app_min_version": "2.2",
-	"version": "1.0.5",
+	"version": "1.0.7",
 	"name": "Code Section",
 	"description": "Inserts a piece of code from code source",
 	"author": "Jürgen Habelt",
@@ -13,6 +13,6 @@
 		"content-plugin",
 		"code-section"
 	],
-	"_publish_hash": "sha256:1701897f32d0dc84b8f552b611bd3efad13a564137066433dcd1dc56437c0ce1",
-	"_publish_commit": "master:8727bd383e4b5eeede8e6e06cdb25f88de178711"
+	"_publish_hash": "sha256:8341e2055fad5ccae8f91f7406570d8a4d595b7a112aefb43e9d2cd948759d17",
+	"_publish_commit": "master:10cc3c98c415c97d46a021aaeb36cbd11d4c5edf"
 }

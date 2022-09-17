@@ -1,4 +1,4 @@
-# Code Section Joplin Plugin
+# Code Section Joplin Plug-in
 
 This plug-in displays a piece of source code. It reads this source code from a source file which is appended to the note. The code is selected by supporting a code definition inside a code definition block.
 
@@ -40,13 +40,19 @@ This could look like this:
 
  1. ~~The resource folder is not recognized after the start of Joplin. Workaround: Invoke the settings and then leave them~~
  2. Only local sources in the resource folder can be displayed, no web content
- 3. The plugin uses synchroneous file access to read the source, no asynchroneous access
+ 3. The plug-in uses synchronous file access to read the source, no asynchronous access
 
 ## Release Notes
 
-### 1.0.4
+### 1.0.7
 
-- Fixed the bug where resource folder was not recognized. Workaround is no longer needed (see Problems 1.).
+- Update of the Joplin API
+- Bug-fix: plug-in did not work without extension of the code file or with more than one dot in the file name
+
+### 1.0.6
+
+- Changed architecture of the plug-in
+- Code Sections are printed now with export to pdf
 
 ### 1.0.5
 
@@ -57,7 +63,6 @@ This could look like this:
   - height: the height of the code section window, may be "auto", "fill", a value in pixels ("400px") or a factor in 
 percent relating to the window height
 
-### 1.0.6
+### 1.0.4
 
-- Changed architecture of the plugin
-- Code Sections are printed now with export to pdf
+- Fixed the bug where resource folder was not recognized. Workaround is no longer needed (see Problems 1.).

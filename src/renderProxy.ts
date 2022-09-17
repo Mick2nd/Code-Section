@@ -22,7 +22,15 @@ export class RenderProxy
 	parse = function(resourcesPath: string, codeDefinition: any) : any
 	{
 		return this.codeExtractor.parse(resourcesPath, codeDefinition);
-	}	
+	}
+	
+	/**
+		@abstract Retrieves the original definition object
+	 */
+	get_object = function() : any
+	{
+		return this.codeExtractor.getOriginalCodeDefinition();
+	}
 	
 	/**
 		@abstract Read text file, extract information and return it

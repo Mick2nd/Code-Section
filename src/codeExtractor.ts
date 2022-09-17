@@ -40,6 +40,8 @@ export class CodeExtractor
 		};
 		
 		this.codeDefinition = JSON.parse(codeDefinition);								// parses the definition string
+		this.originalCodeDefinition = { ...this.codeDefinition };						// can be used for logging
+		
 		for (let key in this.defaults)
 			this.codeDefinition[key] = this.codeDefinition[key] || this.defaults[key];	// then fills the missing entries with defaults
 			
@@ -59,6 +61,14 @@ export class CodeExtractor
 			
 		if (this.codeDefinition.src === '')
 			throw new Error('Missing code source');
+	}
+	
+	/**	
+	 *	@abstract Retrieves the original code definition
+	 */
+	getOriginalCodeDefinition = function() : any
+	{
+		return this.originalCodeDefinition
 	}
 	
 	/**
@@ -152,10 +162,17 @@ export class CodeExtractor
 	 */
 	modify_source = function()
 	{
+		const unmodified = this.codeDefinition.src;
+		// During print a modified entry is created by the framework -> change to required format
 		this.codeDefinition.src = this.codeDefinition.src.replace(/_resources/, ':');
-		this.codeDefinition.src = this.codeDefinition.src.replace(/(\..*?)\..*?\)/, '$1)');
-		this.codeDefinition.src = this.codeDefinition.src.replace(/\[.*?(\..*?)\]\(\:\/(.*?)\)/, '$2$1');
-		console.info(`Modified src definition: ${this.codeDefinition.src}`);
+		this.codeDefinition.src = this.codeDefinition.src.replace(/\.[^.(]*?\)$/, ')');
+	
+		// Second step determines file name as <id>.<ext>
+		this.codeDefinition.src = this.codeDefinition.src.replace(/^\[.*?(\.[^.]*?)?\]\(\:\/(.*?)\)$/, '$2$1');
+		if (! this.codeDefinition.src.includes('.'))
+			this.codeDefinition.src += '.bin';
+		console.info(`de.habelt.CodeSection : Unmodified src definition: ${unmodified}`);
+		console.info(`de.habelt.CodeSection : Modified src definition: ${this.codeDefinition.src}`);
 	}
 	
 	defaults: any;

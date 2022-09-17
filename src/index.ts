@@ -1,6 +1,6 @@
 import joplin from 'api';
 import { ContentScriptType, MenuItemLocation } from 'api/types';
-// const CodeExtractor = require('./codeExtractor');
+const path = require('path');
 
 
 /**
@@ -8,7 +8,7 @@ import { ContentScriptType, MenuItemLocation } from 'api/types';
 	
 	This command inserts a Code Section Template
  */
-const insert_code_section_command = async () => 
+const insertCodeSectionCommand = async () => 
 { 
 	try
 	{
@@ -50,25 +50,22 @@ joplin.plugins.register(
 		await joplin.commands.register({
 			name: 'insertCodeSectionCommand',
 			label: 'Insert Code Section Template',
-			execute: insert_code_section_command
+			execute: insertCodeSectionCommand
 		});
 	
 		await joplin.views.menuItems.create(
 			'mnuInsertCodeSection', 
 			'insertCodeSectionCommand',
 			MenuItemLocation.EditorContextMenu);
-
-		await joplin.commands.register({
-			name: 'testCommandNoArgs',
-			label: 'My Test Command (no args)',
-			execute: async () => {
-				alert('Got command "testCommandNoArgs"');
-			},
-		});
+		
+		const dataDir = await joplin.plugins.dataDir();
+		console.info(`Data Dir is : ${dataDir}`);
+		const resourcesDir = path.resolve(`${dataDir}/../../resources`);
+		console.info(`Resource Dir is : ${resourcesDir}`);
 
 		await joplin.contentScripts.register(
 			ContentScriptType.MarkdownItPlugin,
-			id,
+			`${id}`,																// concatenate id with resources dir -> simpler way
 			'./markdownIt.js'
 		);
 
@@ -78,7 +75,5 @@ joplin.plugins.register(
 			
 			return await joplin.plugins.dataDir();
 		});
-		
-		// CodeExtractor.setDataDir(await joplin.plugins.dataDir());
 	},
 });

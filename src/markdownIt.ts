@@ -7,11 +7,14 @@ module.exports =
 {
 	default: function(context: any) : any 
 	{
-		console.info('Here in Plugin default (OUTER) function');
+		const pluginId = context.pluginId;
+		console.info(`${pluginId} : Here in Plugin default (OUTER) function`);
 		
 		const renderProxy = new RenderProxy.default();
-		if (this.resourcePath === undefined) 
+		if (this.resourcePath === undefined)
+		{ 
 			this.resourcePath = null;
+		}
 		
 		/**
 		 *	This is a default fence renderer
@@ -19,7 +22,7 @@ module.exports =
 		 */
 		const defaultFenceRender = function(tokens: any, idx: any, options: any, env: any, self: any) : any 
 		{
-			console.info('Here in Plugin (defaultFenceRender) function');
+			console.info(`${pluginId} : Here in Plugin (defaultFenceRender) function`);
 			return self.renderToken(tokens, idx, options, env, self);
 		};
 		
@@ -34,16 +37,14 @@ module.exports =
 			let token = tokens[idx]
 			// NOT REQUIRED, may disturb the client code
 			// token['attrs'][0][1] = token['attrs'][0][1].replace(/_resources(.*?)\..*?$/, ':$1')		// TODO: required or trash??
-			console.info(
-				`Invoking Original LINK_OPEN render function at ` + 
-				`${idx}: ${JSON.stringify(token)}`);
+			console.debug(
+				`${pluginId} : Invoking Original LINK_OPEN render function at ${idx} : %O`, token);
 			
 			let result = originalLinkOpenRender(tokens, idx);											// original must be invoked first
 			
 			console.info(
-				`Original LINK_OPEN render function invoked at ` + 
-				`${idx}: ${JSON.stringify(token)}`);
-			console.info(`${ruleOptions.context.currentLinks.length} links`);
+				`${pluginId} : Original LINK_OPEN render function invoked at ${idx} : %O`, token);
+			console.info(`${pluginId} : ${ruleOptions.context.currentLinks.length} links`);
 			
 			if (!this.resourcePath)
 			{
@@ -52,12 +53,11 @@ module.exports =
 				if (link)
 				{
 					this.resourcePath = path.dirname(link.resourceFullPath);
-					console.info(`currentLink set to: ${JSON.stringify(this.resourcePath)}`);
+					console.info(`${pluginId} : currentLink set to: %s`, this.resourcePath);
 				}
 				else
 				{
-					const link = ruleOptions.context.currentLinks.slice(-1)[0]
-					console.info(`Last link is: ${JSON.stringify(link)}`)
+					console.info(`${pluginId} : Links are: %O`, ruleOptions.context.currentLinks);
 				}
 			}
 
@@ -81,8 +81,6 @@ module.exports =
 			{
 				try
 				{
-					console.info(`Here in codesection fence, original content: ${token.content}`);
-					
 					if (!this.resourcePath)
 					{
 						this.resourcePath = alternateResourcePath();								// throws
@@ -92,6 +90,10 @@ module.exports =
 					token.info = renderProxy.get_lang();											// the idea with this code is to modify the current fence token
 					token.content = renderProxy.get_text();
 					
+					console.info(
+						`${pluginId} : Here in codesection fence, original content: %O`, 
+						renderProxy.get_object());
+					
 					let result = originalFenceRender(...arguments);									// then invoke the original render function
 					
 					result = renderProxy.post_process(result);										// for line numbers we need extra mark-up (pre with extra styles)
@@ -99,7 +101,7 @@ module.exports =
 				}
 				catch(e)
 				{
-					console.error(`${e}`);															// in error case display error in rendered pane as this can happen with JSON 
+					console.error(`${pluginId} : ${e}`);											// in error case display error in rendered pane as this can happen with JSON 
 					return '<p style="color: red;">' + `${e}` + '</p>';
 				}
 			}
@@ -122,25 +124,23 @@ module.exports =
 			{
 				throw new Error(`No resource found: ${p}`);
 			} 
-			console.info(`Here in folder: ${p}`)													// working in developer mode only
+			console.info(`${pluginId} : Here in folder: ${p}`)										// working in developer mode only
 			return p;									
 		}
 		
 
 		return {
-			plugin: function(markdownIt: any, ruleOptions: any)
+			plugin: async function(markdownIt: any, ruleOptions: any)
 			{	
-				console.info('Here in Plugin (INNER) function');
+				console.info(`${pluginId} : Here in Plugin (INNER) function`);
 		
-				const pluginId = context.pluginId;
-	
 				let linkOpenRender = null;
 				let fenceRender = null;
 
 				if (!linkOpenRender)
 				{
 					linkOpenRender = markdownIt.renderer.rules.link_open;
-					console.info('Original Link_Open Render stored');
+					console.info(`${pluginId} : Original Link_Open Render stored`);
 					const originalLinkOpenRender = linkOpenRender;
 
 					markdownIt.renderer.rules.link_open = 
@@ -153,7 +153,7 @@ module.exports =
 				if (!fenceRender)
 				{	
 					fenceRender = markdownIt.renderer.rules.fence;
-					console.info('Original Fence Render stored');
+					console.info(`${pluginId} : Original Fence Render stored`);
 					const originalFenceRender = fenceRender || defaultFenceRender;
 
 					markdownIt.renderer.rules.fence = function(...arguments: any) : any 			// replacement for FENCE rule

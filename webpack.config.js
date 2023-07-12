@@ -191,9 +191,6 @@ const createArchiveConfig = {
 		path: publishDir,
 	},
 	plugins: [new WebpackOnBuildPlugin(onBuildCompleted)],
-	node: {
-		"fs": "empty",
-	},
 };
 
 function resolveExtraScriptPath(name) {

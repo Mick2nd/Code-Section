@@ -13,7 +13,7 @@ The code definition looks as follows:
 "end": 50,
 "expandTabs": true,
 "tabSize": 4,
-"lineNumbers": false,
+"lineNumbers": false
 }
 ```
 ````

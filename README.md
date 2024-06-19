@@ -26,7 +26,7 @@ highlighting.
 
 This could look like this:
 
-![Python Source Code](./doc/Python%20Source%20Code.png)
+[![Python Source Code](./doc/Python%20Source%20Code.png)](https://github.com/Mick2nd/Code-Section/blob/master/doc/Python%20Source%20Code.png)
 
 ## Procedure
 

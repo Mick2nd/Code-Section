@@ -25,6 +25,12 @@ export class CodeExtractor
 	parse = function(resourcesPath:string, codeDefinition: any)
 	{
 		this.resourcesPath = resourcesPath;
+		const prefix = "joplin-content:";
+		const len = prefix.length + "/note-viewer/C:/".length;
+		const index = resourcesPath.indexOf(prefix);
+		if (index >= 0) {
+			this.resourcesPath = resourcesPath.substring(index + len);					// NEW! truncate prefix
+		}		
 
 		this.defaults = {																// every parse resets the defaults
 			lang: "",
@@ -105,12 +111,12 @@ export class CodeExtractor
 	style_numbers = function(result: string)
 	{
 		return result.replace(																// for line numbers we need extra mark-up (pre with extra styles)
-			/\<code\>.*?\<\/code\>/smg, 
+			/\<code\>.*?\<\/code\>/mg, 
 			(match: string, offset: any, whole: any) =>
 			{ 
 				const inner = match.
 					replace(
-						/(^|\<code\>)(\d\d\d\d)/smg, 										// do this with regex replacement
+						/(^|\<code\>)(\d\d\d\d)/mg, 										// do this with regex replacement
 						`$1<pre class="hljs-lineno">$2</pre>`);
 				
 				return `<div class="hljs-code" style="font-size: ${this.codeDefinition.scale};` + 

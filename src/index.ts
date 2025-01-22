@@ -1,5 +1,6 @@
 import joplin from 'api';
 import { ContentScriptType, MenuItemLocation } from 'api/types';
+import { settings } from './settings';
 const path = require('path');
 
 
@@ -46,6 +47,8 @@ joplin.plugins.register(
 	onStart: async function() {
 	
 		const id = 'de.habelt.CodeSection';
+
+		await settings.register(id);							// a few ever needed settings
 	
 		await joplin.commands.register({
 			name: 'insertCodeSectionCommand',

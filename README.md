@@ -44,6 +44,12 @@ This could look like this:
 
 ## Release Notes
 
+### 1.0.8
+
+- Update of Code base
+- Simplifications
+- Bug-fix: plug-in did no longer work
+
 ### 1.0.7
 
 - Update of the Joplin API
